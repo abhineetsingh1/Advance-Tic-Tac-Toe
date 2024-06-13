@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Not your Normal Tic Tac Game</title>
+</head>
+<style>
+    body {
+        font-style: inherit;
+        background-color: rgb(17,23,26);
+        color: white;
+        /* background-image:url('images2.jpeg') ; */
+    }
+
+    .game {
+        align-items: center;
+        display: grid;
+        grid-template-columns: repeat(3, 100px);
+        grid-template-rows: repeat(3, 100px);
+        justify-content: center;
+        button:hover{
+            border:solid white 5px;
+        }
+    }
+
+    .box {
+    background-color: rgb(17,23,26);
+        width: 100px;
+        height: 100px;
+        border: 1px solid black;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+        font-size: 50px;
+        border-color: white;
+        border-radius: 5%;
+    }
+    .temp{
+        padding-top: 5px;
+        margin-top: 5px;
+        display: flex;
+        align-items: center;
+        justify-content:center ;
+        button:hover{
+            
+            border:solid white 2px;
+            
+        }
+    }
+    #reset{
+        background-color:  rgb(17,23,26);
+        color: white;
+        border-radius: 5px;
+        
+    }
+</style>
+
+<body>
+    <main class="background">
+        <section class="heading" style="text-align: center;">
+            <h1 style=>Tic Tac Toe</h1>
+            <h3 style=>But not your normal one</h3>
+        </section>
+        <h1 id="msg" style="text-align: center;"> </h1>
+        <div class="game">
+            <button class="box" id="1"> </button>
+            <button class="box" id="2"> </button>
+            <button class="box" id="3"> </button>
+            <button class="box" id="4"> </button>
+            <button class="box" id="5"> </button>
+            <button class="box" id="6"> </button>
+            <button class="box" id="7"> </button>
+            <button class="box" id="8"> </button>
+            <button class="box" id="9"> </button>
+        </div>
+        <br>
+        <div class="temp">
+            <button id="reset" onclick="playSound2()" >Reset</button>
+        </div>
+<div style="text-align: center">
+    <H2> Revisit the Rules- </H2>
+    <h4>1. Start with a normal tic tac game</h4>
+    <h4>2. Remember, there can only be 3 tacs each and the oldest tac will be deleted</h4>
+    <h4>3. You have to remember your old tac before it gets deleted to defeat your oppponent. </h4>
+</div>
+        <script>
+            let boxes = document.querySelectorAll(".box");
+            let reset = document.querySelector("#reset");
+            let msg = document.querySelector("#msg");
+            
+            let boxcounter=[];
+            let starter=0;
+            let turno = true;
+            let winpatt = [
+                [0, 1, 2],
+                [3, 4, 5],
+                [6, 7, 8],
+                [0, 3, 6],
+                [1, 4, 7],
+                [2, 5, 8],
+                [0, 4, 8],
+                [2, 4, 6],
+            ];
+            const resetgame = () => {
+                turno = true;
+                msg.innerText = "";
+                starter=0;
+                boxcounter=[];
+                enableboxes();
+            }
+
+
+            boxes.forEach((box) => {
+                box.addEventListener("click", () => {
+                    boxcounter.push(box.id);
+                    playSound() 
+                    if(boxcounter.length-starter>6){
+                        let tempe= document.getElementById(boxcounter[starter]);
+                        tempe.innerText = "";
+                        tempe.disabled=false;
+                        starter++;
+                    }
+                    if (turno) {
+                        box.innerText = "O";
+                        box.style.color="#558CDB";
+                        turno = false;
+                    }
+                    else {
+                        box.innerText = "X";
+                        box.style.color = "#04AD76";
+                        turno = true;
+                    }
+                    box.disabled = true;
+                    checkwinner();
+                })
+            });
+            const enableboxes = () => {
+                for (box of boxes) {
+                    box.disabled = false;
+                    box.innerText = "";
+                    box.style.backgroundColor = "#11171A";
+                }
+            }
+            const checkwinner = () => {
+                for (patt of winpatt) {
+                    let val1 = boxes[patt[0]].innerText
+                    let val2 = boxes[patt[1]].innerText
+                    let val3 = boxes[patt[2]].innerText
+                    if (val1 != "" && val2 != "" && val3 != "") {
+                        if (val1 == val2 && val2 == val3) {
+                            msg.innerText =`Winner is ${val1}`;
+                            for (let box of boxes) {
+                                box.disabled = true;
+                            }
+
+                        }
+                    }
+                }
+            }
+            reset.addEventListener("click", resetgame)
+            function playSound() {
+                    var sounses = new Audio("mixkit-boxing-punch-2051.wav");
+                    sounses.play();
+                    
+                }
+                function playSound2() {
+                    var soun = new Audio("mixkit-arcade-retro-changing-tab-206.wav");
+                    soun.play();
+                }
+        </script>
+    </main>
+</body>
+
+</html>
